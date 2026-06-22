@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatxPink Game Hub - 50 AAA HTML5 Games</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/hub.css">
+    <link rel="preload" href="assets/fonts/orbitron.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body>
+    <div id="app-container">
+        <!-- Main Hub View -->
+        <div id="hub-view" class="view active">
+            <div class="hub-bg">
+                <canvas id="bg-canvas" class="animated-bg"></canvas>
+            </div>
+
+            <!-- Header with Logo -->
+            <header class="hub-header">
+                <div class="logo-container">
+                    <h1 class="neon-title">CATXPINK</h1>
+                    <p class="subtitle">50 AAA HTML5 Games Collection</p>
+                </div>
+                <div class="header-actions">
+                    <button id="btn-profile" class="btn-icon" title="Profile">
+                        <span class="icon">👤</span>
+                    </button>
+                    <button id="btn-achievements" class="btn-icon" title="Achievements">
+                        <span class="icon">🏆</span>
+                    </button>
+                    <button id="btn-settings" class="btn-icon" title="Settings">
+                        <span class="icon">⚙️</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section class="dashboard-section">
+                <div class="dashboard-grid">
+                    <!-- Player Stats Card -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Player Stats</h3>
+                            <span class="level-badge" id="level-display">Level 1</span>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-item">
+                                <span class="stat-label">XP Progress</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="xp-bar" style="width: 0%"></div>
+                                </div>
+                                <span class="stat-value" id="xp-display">0 / 1000</span>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-mini">
+                                    <span class="icon">💰</span>
+                                    <span class="value" id="coins-display">0</span>
+                                </div>
+                                <div class="stat-mini">
+                                    <span class="icon">⭐</span>
+                                    <span class="value" id="stars-display">0</span>
+                                </div>
+                                <div class="stat-mini">
+                                    <span class="icon">🎮</span>
+                                    <span class="value" id="playtime-display">0h</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Daily Rewards Card -->
+                    <div class="stat-card">
+                        <h3>Daily Rewards</h3>
+                        <div class="daily-rewards">
+                            <button id="btn-daily-reward" class="btn-reward">
+                                <span class="reward-icon">🎁</span>
+                                <span class="reward-text" id="reward-text">Claim Reward</span>
+                            </button>
+                            <p class="reward-info" id="reward-info">Claim 100 coins daily!</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats Card -->
+                    <div class="stat-card">
+                        <h3>Quick Stats</h3>
+                        <div class="quick-stats">
+                            <div class="stat-row">
+                                <span>Games Played:</span>
+                                <strong id="games-played">0</strong>
+                            </div>
+                            <div class="stat-row">
+                                <span>Total Wins:</span>
+                                <strong id="total-wins">0</strong>
+                            </div>
+                            <div class="stat-row">
+                                <span>Achievements:</span>
+                                <strong id="achievements-count">0/150</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Game Categories Section -->
+            <section class="games-section">
+                <div class="section-header">
+                    <h2>🎮 Game Library</h2>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="multiplayer">Multiplayer</button>
+                        <button class="filter-btn" data-filter="action">Action</button>
+                        <button class="filter-btn" data-filter="puzzle">Puzzle</button>
+                        <button class="filter-btn" data-filter="arcade">Arcade</button>
+                    </div>
+                </div>
+
+                <div id="games-grid" class="games-grid">
+                    <!-- Games will be loaded here dynamically -->
+                </div>
+            </section>
+
+            <!-- Leaderboard Section -->
+            <section class="leaderboard-section">
+                <div class="section-header">
+                    <h2>🏅 Top Players</h2>
+                </div>
+                <div class="leaderboard-container">
+                    <div class="leaderboard-list" id="leaderboard-list">
+                        <!-- Will be populated -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Game View -->
+        <div id="game-view" class="view">
+            <div class="game-header">
+                <button id="btn-back-to-hub" class="btn-back">← Back to Hub</button>
+                <div class="game-title" id="game-title">Game Name</div>
+                <div class="game-stats">
+                    <span id="game-score">Score: 0</span>
+                </div>
+            </div>
+            <div id="game-container" class="game-container">
+                <!-- Game iframe/canvas will load here -->
+            </div>
+        </div>
+
+        <!-- Profile Modal -->
+        <div id="profile-modal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close">&times;</button>
+                <h2>Player Profile</h2>
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <div class="avatar-placeholder" id="avatar-display">👤</div>
+                    </div>
+                    <div class="profile-details">
+                        <h3 id="player-name">Guest Player</h3>
+                        <p id="player-id-display">ID: loading...</p>
+                        <button id="btn-login-guest" class="btn-primary">Login as Guest</button>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <h3>Statistics</h3>
+                    <div class="stats-table">
+                        <div class="stat-row">
+                            <span>Total Games Played:</span>
+                            <strong id="profile-games-played">0</strong>
+                        </div>
+                        <div class="stat-row">
+                            <span>Total Wins:</span>
+                            <strong id="profile-wins">0</strong>
+                        </div>
+                        <div class="stat-row">
+                            <span>Win Rate:</span>
+                            <strong id="profile-winrate">0%</strong>
+                        </div>
+                        <div class="stat-row">
+                            <span>Total Coins Earned:</span>
+                            <strong id="profile-coins-earned">0</strong>
+                        </div>
+                        <div class="stat-row">
+                            <span>Achievements Unlocked:</span>
+                            <strong id="profile-achievements">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close">&times;</button>
+                <h2>Settings</h2>
+                <div class="settings-group">
+                    <label>Master Volume</label>
+                    <div class="volume-control">
+                        <input type="range" id="volume-master" min="0" max="100" value="70" class="slider">
+                        <span id="volume-display">70%</span>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <label>Music Volume</label>
+                    <div class="volume-control">
+                        <input type="range" id="volume-music" min="0" max="100" value="70" class="slider">
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <label>SFX Volume</label>
+                    <div class="volume-control">
+                        <input type="range" id="volume-sfx" min="0" max="100" value="70" class="slider">
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="toggle-particles" checked>
+                        Enable Particles
+                    </label>
+                </div>
+                <div class="settings-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="toggle-bloom" checked>
+                        Enable Bloom Effect
+                    </label>
+                </div>
+                <div class="settings-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="toggle-screen-shake" checked>
+                        Enable Screen Shake
+                    </label>
+                </div>
+                <button id="btn-clear-data" class="btn-danger">Clear All Data</button>
+            </div>
+        </div>
+
+        <!-- Achievements Modal -->
+        <div id="achievements-modal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close">&times;</button>
+                <h2>Achievements</h2>
+                <div class="achievements-grid" id="achievements-grid">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievement Unlock Notification -->
+        <div id="achievement-popup" class="achievement-popup">
+            <div class="popup-content">
+                <span class="popup-icon">🏆</span>
+                <div class="popup-text">
+                    <h4 id="popup-title">Achievement Unlocked!</h4>
+                    <p id="popup-desc">Description</p>
+                </div>
+                <span class="popup-reward">+<span id="popup-reward">0</span> coins</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/core/storage.js"></script>
+    <script src="js/core/audio-manager.js"></script>
+    <script src="js/core/asset-manager.js"></script>
+    <script src="js/core/particle-system.js"></script>
+    <script src="js/core/effects.js"></script>
+    <script src="js/core/game-manager.js"></script>
+    <script src="js/core/achievement-system.js"></script>
+    <script src="js/core/progression-system.js"></script>
+    <script src="js/hub/background-animator.js"></script>
+    <script src="js/hub/game-hub.js"></script>
+    <script src="js/hub/leaderboard-manager.js"></script>
+    <script src="js/games/games-loader.js"></script>
+</body>
+</html>
